@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Notify</string>
+    <string name="WHATSAPP">com.whatsapp</string>
+    <string name="DAILER">com.android.dialer</string>
+    <string name="MESSAGING">com.android.messaging</string>
+    <string name="FACEBOOK">com.facebook.katana</string>
+    <string name="GMAIL">com.google.android.gm</string>
+
 </resources>
