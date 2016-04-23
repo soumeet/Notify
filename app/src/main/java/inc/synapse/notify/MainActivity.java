@@ -13,12 +13,14 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView lv1;
-    private TextView tv1;
+    //private TextView tv1;
     private String PACKAGE_NAME;
     private String TAG;
     private String pref_LIST="LIST";
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
         }
+        read_pref();
     }
 
     protected void onDestroy() {
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         lv1= (ListView) findViewById(R.id.lv1);
-        tv1= (TextView) findViewById(R.id.tv1);
+//        tv1= (TextView) findViewById(R.id.tv1);
         adapter=new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 listsummary);
@@ -64,26 +67,31 @@ public class MainActivity extends AppCompatActivity {
         PACKAGE_NAME = getApplicationContext().getPackageName();
         TAG = this.getClass().getSimpleName();
         app_store=getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
-        //read_pref();
     }
 
 
     class nReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
-            String tmp;
+            /*String tmp;
             tmp = "\n"+intent.getStringExtra("notification_event");
             tv1.append(tmp);
             tmp = intent.getStringExtra("summary_event");
             if(tmp!=null)
-                adapter.add(tmp);
+                adapter.add(tmp);*/
             read_pref();
         }
     }
 
     public void read_pref(){
         list=app_store.getInt(pref_LIST,0);
-        for (int i=0; i<list; i++)
-            Log.d(TAG, app_store.getString("_"+i, null));
+        Log.i(TAG, "reading_pref: list_size"+list);
+        adapter.clear();
+        for (int i=0; i<list; i++) {
+
+            String tmp = app_store.getString("_" + i, null);
+            if (tmp != null)
+                adapter.add(tmp);
+        }
     }
 
 }

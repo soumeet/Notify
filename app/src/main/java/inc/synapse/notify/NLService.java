@@ -11,6 +11,7 @@ import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,7 +54,7 @@ public class NLService extends NotificationListenerService {
         Intent i = new  Intent("inc.synapse.notify");
         boolean f1=pkg_name.equalsIgnoreCase("com.whatsapp");
         boolean f2=pkg_name.equalsIgnoreCase("com.android.dialer");
-        boolean f3=pkg_name.equalsIgnoreCase("com.android.messaging");
+        boolean f3=pkg_name.equalsIgnoreCase("com.android.messaging") || pkg_name.equalsIgnoreCase("com.android.mms");
         boolean f4=pkg_name.equalsIgnoreCase("com.facebook.katana");
         boolean f5=pkg_name.equalsIgnoreCase("com.google.android.gm");
         /*Log.d(TAG, ""+sbn.getPackageName()+"< >"+getString(R.string.WHATSAPP)+" : "+f1);
@@ -72,7 +73,7 @@ public class NLService extends NotificationListenerService {
             if(aManager.getMode()==AudioManager.RINGER_MODE_NORMAL || aManager.getMode()==AudioManager.RINGER_MODE_VIBRATE)
                 aManager.setMode(AudioManager.RINGER_MODE_SILENT);
             this.cancelNotification(String.valueOf(sbn.getKey()));
-            i.putExtra("notification_event",timestamp+" Blocked :" + sbn.getPackageName());
+            //i.putExtra("notification_event",timestamp+" Blocked :" + sbn.getPackageName());
         }
         sendBroadcast(i);
     }
@@ -87,12 +88,16 @@ public class NLService extends NotificationListenerService {
 
     public void read_pref(){
         list=app_store.getInt(pref_LIST,0);
+        /*Toast.makeText(getApplicationContext(), ""+list+"_", Toast.LENGTH_SHORT).show();*/
+        Log.i(TAG, "reading_pref: list_"+list);
     }
 
     public void write_pref(Summary sm){
-//        Log.d(TAG, ""+list+" writing_pref: "+"_"+list+" < >"+sm.time_stamp+" "+sm.get_pckg_name()+" "+sm.no_notf);
-        new  Intent("inc.synapse.notify").putExtra("notification_event",""+list+" writing_pref: "+"_"+list+" < >"+sm.time_stamp+" "+sm.get_pckg_name()+" "+sm.no_notf);
+        //Toast.makeText(getApplicationContext(), " writing_pref: "+"_"+list+" < >"+sm.time_stamp+" "+sm.get_pckg_name()+" "+sm.no_notf, Toast.LENGTH_SHORT).show();
+        //new  Intent("inc.synapse.notify").putExtra("notification_event",""+list+" writing_pref: "+"_"+list+" < >"+sm.time_stamp+" "+sm.get_pckg_name()+" "+sm.no_notf);
         app_store.edit().putString("_"+list++,sm.time_stamp+" "+sm.get_pckg_name()+" "+sm.no_notf).commit();
-        app_store.edit().putInt(pref_LIST, list);
+        app_store.edit().putInt(pref_LIST, list).commit();
+        Log.i(TAG, ""+list+" writing_pref: "+"_"+list+" < >"+sm.time_stamp+" "+sm.get_pckg_name()+" "+sm.no_notf);
+        Log.i(TAG, "writing_pref: list_size"+list);
     }
 }
