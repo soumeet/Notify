@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv1;
     private String PACKAGE_NAME;
     private String TAG;
+    private String pref_LIST="LIST";
+    private int list=0;
     ContentResolver contentResolver;
     String enabledNotificationListeners;
     ArrayList<String> listsummary=new ArrayList<String>();
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         PACKAGE_NAME = getApplicationContext().getPackageName();
         TAG = this.getClass().getSimpleName();
         app_store=getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        //read_pref();
     }
 
 
@@ -72,11 +76,14 @@ public class MainActivity extends AppCompatActivity {
             tmp = intent.getStringExtra("summary_event");
             if(tmp!=null)
                 adapter.add(tmp);
+            read_pref();
         }
     }
 
     public void read_pref(){
-
+        list=app_store.getInt(pref_LIST,0);
+        for (int i=0; i<list; i++)
+            Log.d(TAG, app_store.getString("_"+i, null));
     }
 
 }

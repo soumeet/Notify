@@ -16,7 +16,6 @@ public class DBHelper extends SQLiteOpenHelper {
     // Contacts table name
     private static final String TB_SUMMARY = "summary";
     // Contacts Table Columns names
-    private static final String ID = "id";
     private static final String PACKAGE_NAME = "package_name";
     private static final String TIME_STAMP = "timestamp";
     private static final String NO_NOTF = "no_notf";
@@ -28,8 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         String CREATE_SUMMARY_TABLE = "CREATE TABLE " + TB_SUMMARY + "("
-                + ID + " INTEGER PRIMARY KEY," + PACKAGE_NAME + " TEXT,"
-                + TIME_STAMP + " TEXT" + NO_NOTF + " TEXT"+")";
+                + PACKAGE_NAME + " TEXT," + TIME_STAMP + " TEXT" + NO_NOTF + " TEXT"+")";
         Log.d(TAG, "sql: "+CREATE_SUMMARY_TABLE);
         db.execSQL(CREATE_SUMMARY_TABLE);
     }
@@ -55,12 +53,11 @@ public class DBHelper extends SQLiteOpenHelper {
     Summary getContact(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TB_SUMMARY, new String[] {PACKAGE_NAME, TIME_STAMP, NO_NOTF},  ID+ "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query(TB_SUMMARY, new String[] {PACKAGE_NAME, TIME_STAMP, NO_NOTF}, null, null, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Summary contact = new Summary(cursor.getString(1), cursor.getString(2), cursor.getString(3));
+        Summary contact = new Summary(cursor.getString(0), cursor.getString(1), cursor.getString(2));
         // return contact
         return contact;
     }
